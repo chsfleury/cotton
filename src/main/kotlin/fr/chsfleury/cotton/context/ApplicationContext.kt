@@ -1,6 +1,7 @@
 package fr.chsfleury.cotton.context
 
 import com.google.common.reflect.TypeToken
+import com.uchuhimo.konf.Config
 import fr.chsfleury.cotton.env.Environment
 import org.slf4j.LoggerFactory
 import java.lang.reflect.*
@@ -83,6 +84,8 @@ class ApplicationContext private constructor() {
         return bean(type, name)
     }
 
+    inline operator fun <reified T : Any> invoke(name: String? = null): T = bean(name)
+
     /*/////////////////////////////
     ///////// PUBLIC
     //////////////////////////// */
@@ -96,9 +99,13 @@ class ApplicationContext private constructor() {
         registerBean(bean, profile)
     }
 
+
+
     fun <T : Any> bean(type: TypeToken<T>, name: String? = null): T {
         log.debug("trying to get a bean of type '{}' and name '{}'", type, name)
         return when {
+            type.rawType.equals(Environment::class.java) -> env() as T
+            type.rawType.equals(Config::class.java) -> env() as T
             type.isSubtypeOf(LIST_TYPE) -> {
                 val listBean = getOne(type, name)
                 if (listBean == null) {
@@ -206,8 +213,8 @@ class ApplicationContext private constructor() {
         val LIST_TYPE: TypeToken<List<*>> = TypeToken.of(List::class.java)
         val SET_TYPE: TypeToken<Set<*>> = TypeToken.of(Set::class.java)
 
-        fun context(env: Environment = Environment(), init: ApplicationContext.() -> Unit): ApplicationContext = ApplicationContext()
+        fun context(env: Environment = Environment(), init: ApplicationContext.(Environment) -> Unit): ApplicationContext = ApplicationContext()
             .apply { env(env) }
-            .also(init)
+            .also{ init(it, env) }
     }
 }

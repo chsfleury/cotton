@@ -1,6 +1,7 @@
 package fr.chsfleury.cotton
 
 import fr.chsfleury.cotton.context.ApplicationContext.Companion.context
+import fr.chsfleury.cotton.env.Environment
 
 object ApplicationContextTest {
     @JvmStatic
@@ -33,5 +34,7 @@ object ApplicationContextTest {
         println(pair)
         val simpleClass: SimpleClass = ctx.bean();
         println(simpleClass)
+        val env: Environment = ctx.bean();
+        println(env)
     }
 }
