@@ -3,7 +3,7 @@ package fr.chsfleury.cotton.dsl
 import fr.chsfleury.cotton.context.ApplicationContext
 import fr.chsfleury.cotton.env.Environment
 import io.javalin.Javalin
-import io.javalin.core.JavalinConfig
+import io.javalin.config.JavalinConfig
 
 class JavalinDsl(
     private val cottonBuilder: CottonBuilder

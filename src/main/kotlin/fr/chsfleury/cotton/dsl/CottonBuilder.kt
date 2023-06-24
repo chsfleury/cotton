@@ -6,7 +6,7 @@ import fr.chsfleury.cotton.context.ApplicationContext
 import fr.chsfleury.cotton.env.Environment
 import fr.chsfleury.cotton.javalin.JavalinStateHolder
 import io.javalin.Javalin
-import io.javalin.core.JavalinConfig
+import io.javalin.config.JavalinConfig
 
 class CottonBuilder {
     var environmentInit: (EnvironmentDsl.() -> Unit)? = null

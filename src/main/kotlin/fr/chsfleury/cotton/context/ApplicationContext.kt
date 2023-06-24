@@ -4,7 +4,11 @@ import com.google.common.reflect.TypeToken
 import com.uchuhimo.konf.Config
 import fr.chsfleury.cotton.env.Environment
 import org.slf4j.LoggerFactory
-import java.lang.reflect.*
+import java.lang.reflect.Parameter
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
+import java.lang.reflect.TypeVariable
+import java.lang.reflect.WildcardType
 
 class ApplicationContext private constructor() {
     private val beans = mutableMapOf<String, MutableSet<Bean<*>>>()

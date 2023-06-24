@@ -1,6 +1,5 @@
 package fr.chsfleury.cotton.dsl
 
-import fr.chsfleury.cotton.Cotton
 import fr.chsfleury.cotton.context.ApplicationContext
 import fr.chsfleury.cotton.env.Environment
 
