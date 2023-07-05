@@ -6,12 +6,6 @@ import fr.chsfleury.cotton.env.Environment
 class CottonDsl(
     private val cottonBuilder: CottonBuilder
 ) {
-
-
-    fun env(envInit: EnvironmentDsl.() -> Unit) {
-        cottonBuilder.environmentInit = envInit
-    }
-
     fun context(ctxInit: ApplicationContext.(Environment) -> Unit) {
         cottonBuilder.contextInit = ctxInit
     }

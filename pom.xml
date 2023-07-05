@@ -6,7 +6,7 @@
 
     <artifactId>cotton</artifactId>
     <groupId>fr.chsfleury</groupId>
-    <version>latest</version>
+    <version>1.1.8.22</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -20,7 +20,10 @@
         <javalin.version>5.6.0</javalin.version>
 
         <!--CONFIGURATION-->
-        <konf.version>1.1.2</konf.version>
+        <hoplite.version>2.7.4</hoplite.version>
+
+        <!--JACKSON-->
+        <jackson.version>2.15.2</jackson.version>
 
         <!--LOGGING-->
         <slf4j.version>2.0.7</slf4j.version>
@@ -34,7 +37,6 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin.version}</version>
         </dependency>
 
         <!--WEB-->
@@ -46,14 +48,12 @@
 
         <!--CONFIGURATION-->
         <dependency>
-            <groupId>com.uchuhimo</groupId>
-            <artifactId>konf-core</artifactId>
-            <version>${konf.version}</version>
+            <groupId>com.sksamuel.hoplite</groupId>
+            <artifactId>hoplite-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.uchuhimo</groupId>
-            <artifactId>konf-yaml</artifactId>
-            <version>${konf.version}</version>
+            <groupId>com.sksamuel.hoplite</groupId>
+            <artifactId>hoplite-yaml</artifactId>
         </dependency>
 
         <!--LOGGING-->
@@ -91,6 +91,105 @@
         </dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <!--KOTLIN-->
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-jdk8</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-reflect</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib-common</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-stdlib</artifactId>
+                <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>24.0.1</version>
+            </dependency>
+
+            <!--CONFIGURATION-->
+            <dependency>
+                <groupId>com.sksamuel.hoplite</groupId>
+                <artifactId>hoplite-core</artifactId>
+                <version>${hoplite.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sksamuel.hoplite</groupId>
+                <artifactId>hoplite-yaml</artifactId>
+                <version>${hoplite.version}</version>
+            </dependency>
+
+
+            <!--JSON-->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <!--YAML-->
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>2.0</version>
+            </dependency>
+
+            <!--MISC-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>1.10.0</version>
+            </dependency>
+
+            <!--LOGGING-->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>2.0.7</version>
+            </dependency>
+
+            <!--TESTING-->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
@@ -123,6 +222,14 @@
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.22.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

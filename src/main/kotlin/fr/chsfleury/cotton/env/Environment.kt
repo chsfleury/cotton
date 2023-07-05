@@ -1,31 +1,22 @@
 package fr.chsfleury.cotton.env
 
-import com.uchuhimo.konf.Config
-import com.uchuhimo.konf.Spec
-import com.uchuhimo.konf.source.yaml
-import fr.chsfleury.cotton.env.specs.AppSpec
-import fr.chsfleury.cotton.env.specs.ServerSpec
+import com.sksamuel.hoplite.ConfigLoader
+import com.sksamuel.hoplite.ConfigLoaderBuilder
 
-open class Environment(
-    specs: MutableSet<Spec> = mutableSetOf(),
-    resourceFiles: Set<String> = setOf("application.yml"),
-    private val env: Config = Config { specs.apply { addAll(builtins) }.forEach { addSpec(it) } }
-        .let {
-            var current = it
-            for(rc in resourceFiles) {
-                current = current.from.yaml.resource(rc)
-            }
-            current
-        }
-        .from.env()
-        .from.systemProperties()
-) : Config by env {
-    val activeProfiles: List<String> = env[AppSpec.profiles]
-        .splitToSequence(',')
-        .map { it.trim() }
-        .toList() + "*"
+class Environment(
+    val resourceFiles: List<String> = listOf("/application.yml"),
+) {
+    val configLoader: ConfigLoader = ConfigLoaderBuilder
+        .default()
+        .build()
 
-    companion object {
-        val builtins = setOf(AppSpec, ServerSpec)
+    val config: CottonConfiguration = configLoader.loadConfigOrThrow<CottonConfiguration>(resourceFiles)
+    val activeProfiles: List<String> = config.profiles.map(String::trim) + "*"
+
+    inline fun <reified T: Any> loadConfig(): T = configLoader.loadConfigOrThrow<T>(resourceFiles)
+    override fun toString(): String {
+        return "Environment(activeProfiles=$activeProfiles)"
     }
+
+
 }

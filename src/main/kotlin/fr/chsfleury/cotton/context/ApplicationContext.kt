@@ -1,7 +1,6 @@
 package fr.chsfleury.cotton.context
 
 import com.google.common.reflect.TypeToken
-import com.uchuhimo.konf.Config
 import fr.chsfleury.cotton.env.Environment
 import org.slf4j.LoggerFactory
 import java.lang.reflect.Parameter
@@ -109,7 +108,6 @@ class ApplicationContext private constructor() {
         log.debug("trying to get a bean of type '{}' and name '{}'", type, name)
         return when {
             type.rawType.equals(Environment::class.java) -> env() as T
-            type.rawType.equals(Config::class.java) -> env() as T
             type.isSubtypeOf(LIST_TYPE) -> {
                 val listBean = getOne(type, name)
                 if (listBean == null) {
@@ -217,7 +215,7 @@ class ApplicationContext private constructor() {
         val LIST_TYPE: TypeToken<List<*>> = TypeToken.of(List::class.java)
         val SET_TYPE: TypeToken<Set<*>> = TypeToken.of(Set::class.java)
 
-        fun context(env: Environment = Environment(), init: ApplicationContext.(Environment) -> Unit): ApplicationContext = ApplicationContext()
+        fun  context(env: Environment = Environment(), init: ApplicationContext.(Environment) -> Unit): ApplicationContext = ApplicationContext()
             .apply { env(env) }
             .also{ init(it, env) }
     }

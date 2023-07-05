@@ -4,7 +4,6 @@ import fr.chsfleury.cotton.context.ApplicationContext
 import fr.chsfleury.cotton.dsl.CottonBuilder
 import fr.chsfleury.cotton.dsl.CottonDsl
 import fr.chsfleury.cotton.env.Environment
-import fr.chsfleury.cotton.env.specs.ServerSpec
 import fr.chsfleury.cotton.javalin.JavalinStateHolder
 import io.javalin.Javalin
 
@@ -15,7 +14,7 @@ class Cotton(
     private val javalinStateHolder: JavalinStateHolder
 ) {
     companion object {
-        fun cotton(cottonInit: CottonDsl.() -> Unit): Cotton {
+        fun  cotton(cottonInit: CottonDsl.() -> Unit): Cotton {
             val cottonBuilder = CottonBuilder()
             val cottonDsl = CottonDsl(cottonBuilder)
             cottonInit(cottonDsl)
@@ -25,7 +24,7 @@ class Cotton(
 
     fun start() {
         if (!javalinStateHolder.started) {
-            javalin.start(env[ServerSpec.port])
+            javalin.start(env.config.server.port)
         }
     }
 }
