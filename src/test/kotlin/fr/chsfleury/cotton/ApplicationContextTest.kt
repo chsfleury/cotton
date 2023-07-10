@@ -6,7 +6,8 @@ import fr.chsfleury.cotton.env.Environment
 object ApplicationContextTest {
     @JvmStatic
     fun main(args: Array<String>) {
-        val ctx = context {
+        val env = Environment("/application.yml")
+        val ctx = context(env) {
             singleton { "string" }
             singleton { 2 }
             singleton(name = "first") { listOf("hello", "world") }
@@ -34,7 +35,7 @@ object ApplicationContextTest {
         println(pair)
         val simpleClass: SimpleClass = ctx.bean();
         println(simpleClass)
-        val env: Environment = ctx.bean();
-        println(env)
+        val env2: Environment = ctx.bean();
+        println(env2)
     }
 }

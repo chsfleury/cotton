@@ -2,6 +2,7 @@ package fr.chsfleury.cotton.context
 
 import com.google.common.reflect.TypeToken
 import fr.chsfleury.cotton.env.Environment
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.lang.reflect.Parameter
 import java.lang.reflect.ParameterizedType
@@ -22,9 +23,9 @@ class ApplicationContext private constructor() {
         primary: Boolean = false,
         profile: String = DEFAULT_PROFILE,
         noinline supplier: ApplicationContext.() -> T
-    ) {
+    ): T {
         val type = object : TypeToken<T>() {}
-        singleton(Bean(supplier(this), type, primary, name), profile)
+        return singleton(Bean(supplier(this), type, primary, name), profile)
     }
 
     inline fun <reified T : Any> singleton(
@@ -98,8 +99,8 @@ class ApplicationContext private constructor() {
         environment = env
     }
 
-    fun <T : Any> singleton(bean: Bean<T>, profile: String = DEFAULT_PROFILE) {
-        registerBean(bean, profile)
+    fun <T : Any> singleton(bean: Bean<T>, profile: String = DEFAULT_PROFILE): T {
+        return registerBean(bean, profile)
     }
 
 
@@ -196,26 +197,27 @@ class ApplicationContext private constructor() {
     private fun typeMatch(beanType: TypeToken<*>, candidateType: TypeToken<*>): Boolean {
         return beanType.isSubtypeOf(candidateType)
                 || (beanType.rawType.equals(candidateType.rawType) && beanType.isSupertypeOf(candidateType))
-
     }
 
     private fun getAll(profile: String): Set<Bean<*>> = beans[profile] ?: emptySet()
 
-    private fun <T : Any> registerBean(bean: Bean<T>, profile: String) {
+    private fun <T : Any> registerBean(bean: Bean<T>, profile: String): T {
         log.debug("registering bean {} for profile '{}'", bean, profile)
         beans
             .computeIfAbsent(profile) { mutableSetOf() }
             .add(bean)
+
+        return bean.obj
     }
 
     companion object {
-        val log = LoggerFactory.getLogger(ApplicationContext::class.java)
+        val log: Logger = LoggerFactory.getLogger(ApplicationContext::class.java)
 
         const val DEFAULT_PROFILE = "*"
         val LIST_TYPE: TypeToken<List<*>> = TypeToken.of(List::class.java)
         val SET_TYPE: TypeToken<Set<*>> = TypeToken.of(Set::class.java)
 
-        fun  context(env: Environment = Environment(), init: ApplicationContext.(Environment) -> Unit): ApplicationContext = ApplicationContext()
+        fun context(env: Environment, init: ApplicationContext.(Environment) -> Unit): ApplicationContext = ApplicationContext()
             .apply { env(env) }
             .also{ init(it, env) }
     }

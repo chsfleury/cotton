@@ -4,8 +4,10 @@ import com.sksamuel.hoplite.ConfigLoader
 import com.sksamuel.hoplite.ConfigLoaderBuilder
 
 class Environment(
-    val resourceFiles: List<String> = listOf("/application.yml"),
+    val resourceFiles: List<String>,
 ) {
+    constructor(vararg resourceFiles: String) : this(resourceFiles.toList())
+
     val configLoader: ConfigLoader = ConfigLoaderBuilder
         .default()
         .build()

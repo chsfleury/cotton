@@ -13,7 +13,7 @@ class CottonBuilder {
 
     var javalinConfigInit: (JavalinConfig.(ApplicationContext, Environment) -> Unit)? = null
     var javalinSetupInit: (Javalin.(ApplicationContext, Environment) -> Unit)? = null
-    val propertySources: MutableList<String> = mutableListOf("application.yml")
+    var propertySources: List<String> = mutableListOf("/application.yml")
 
     fun build(): Cotton {
         val env = Environment(propertySources)

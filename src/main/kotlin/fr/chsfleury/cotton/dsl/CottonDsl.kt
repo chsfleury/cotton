@@ -10,6 +10,10 @@ class CottonDsl(
         cottonBuilder.contextInit = ctxInit
     }
 
+    fun propertySources(vararg propertySources: String) {
+        cottonBuilder.propertySources = propertySources.toList()
+    }
+
     fun javalin(javalinInit: JavalinDsl.() -> Unit) {
         cottonBuilder.javalinInit = javalinInit
     }
