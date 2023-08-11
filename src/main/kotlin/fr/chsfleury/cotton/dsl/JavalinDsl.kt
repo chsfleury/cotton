@@ -6,7 +6,7 @@ import io.javalin.Javalin
 import io.javalin.config.JavalinConfig
 
 class JavalinDsl(
-    private val cottonBuilder: CottonBuilder
+    private val cottonBuilder: CottonDsl
 ) {
     fun config(javalinConfigInit: JavalinConfig.(ApplicationContext, Environment) -> Unit) {
         cottonBuilder.javalinConfigInit = javalinConfigInit
