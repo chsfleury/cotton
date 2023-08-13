@@ -8,6 +8,7 @@ object ApplicationContextTest {
     fun main(args: Array<String>) {
         val env = Environment("/application.yml")
         val ctx = context(env) {
+            singleton<SimpleClass>()
             singleton { "string" }
             singleton { 2 }
             singleton(name = "first") { listOf("hello", "world") }
@@ -16,8 +17,8 @@ object ApplicationContextTest {
             singleton { "key" to 2.4 }
 
             singleton<Pair<Int, List<String>>>()
-            singleton<SimpleClass>()
         }
+        ctx.resolve(1)
 
         val str: String = ctx.bean()
         println(str)
