@@ -2,6 +2,7 @@ package fr.chsfleury.cotton.dsl
 
 import fr.chsfleury.cotton.Cotton
 import fr.chsfleury.cotton.context.ApplicationContext
+import fr.chsfleury.cotton.controller.Controller
 import fr.chsfleury.cotton.env.Environment
 import fr.chsfleury.cotton.javalin.JavalinStateHolder
 import io.javalin.Javalin
@@ -31,6 +32,7 @@ class CottonDsl {
         val env = Environment(propertySources)
 
         val context: ApplicationContext = ApplicationContext.context(env, contextInit ?: {})
+        context.resolve()
 
         val javalinDsl = JavalinDsl(this)
         javalinInit?.invoke(javalinDsl)
@@ -41,6 +43,11 @@ class CottonDsl {
             .events { e ->
                 e.serverStarted { javalinStateHolder.started = true }
             }
+
+        val controllers: List<Controller> = context.bean()
+        javalin.routes {
+            controllers.forEach(Controller::setup)
+        }
 
         javalinSetupInit?.invoke(javalin, context, env)
 

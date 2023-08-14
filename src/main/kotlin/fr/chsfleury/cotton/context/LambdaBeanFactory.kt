@@ -14,4 +14,6 @@ class LambdaBeanFactory<T: Any>(
         primary,
         name
     )
+
+    override fun toString(): String = "LambdaBeanFactory { name: $name, type: ${type.rawType.name}, primary: $primary }"
 }
