@@ -1,5 +1,7 @@
 package fr.chsfleury.cotton.dsl
 
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS
 import fr.chsfleury.cotton.Cotton
 import fr.chsfleury.cotton.context.ApplicationContext
 import fr.chsfleury.cotton.controller.Controller
@@ -7,6 +9,7 @@ import fr.chsfleury.cotton.env.Environment
 import fr.chsfleury.cotton.javalin.JavalinStateHolder
 import io.javalin.Javalin
 import io.javalin.config.JavalinConfig
+import io.javalin.json.JavalinJackson
 
 class CottonDsl {
     var contextInit: (ApplicationContext.(Environment) -> Unit)? = null
@@ -39,7 +42,14 @@ class CottonDsl {
 
         val javalinStateHolder = JavalinStateHolder()
         val javalin = Javalin
-            .create { config -> javalinConfigInit?.invoke(config, context, env) }
+            .create { config ->
+                javalinConfigInit?.invoke(config, context, env)
+
+                val objectMapper = JavalinJackson.defaultMapper()
+                    .configure(WRITE_DATES_AS_TIMESTAMPS, false)
+
+                config.jsonMapper(JavalinJackson(objectMapper))
+            }
             .events { e ->
                 e.serverStarted { javalinStateHolder.started = true }
             }
