@@ -17,4 +17,8 @@ class Cotton(
             javalin.start(env.config.server.port)
         }
     }
+
+    fun stop() {
+        javalin.stop()
+    }
 }
